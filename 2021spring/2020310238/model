@@ -1,0 +1,24 @@
+from sympy import *
+import math
+import numpy as np
+from sympy.abc import x
+
+C = np.array([[106,212]]).T
+A = Matrix([[0.88, 0.15], [0.12, 0.85]])
+
+def mi(A, n):
+    if n==1:
+        return A
+    else:
+        for i in range(n):
+            return A*mi(A, n-1)
+
+def fin(x, A, C):
+    w, v = np.linalg.eig(A)
+    P = v.T
+    B = Matrix(diag(w))
+    return P*mi(B,x)*(P.I)*C
+
+F = Matrix([limit(fin(x, A, C)[0], x, float('inf')), limit(fin(x, A, C)[1], x, float('inf'))]).T
+    
+print(F)
